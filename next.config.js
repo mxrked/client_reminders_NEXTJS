@@ -14,7 +14,7 @@ module.exports = {
 
   //! This added clean urls and eliminates the .html extension aswell as linking
   //! CSS and JS with the trailingSlash
-  assetPrefix: isProd ? "" : "",
+  assetPrefix: isProd ? "https://boisterous-bonbon-6d6aa7.netlify.app/" : "",
   trailingSlash: true,
 
   // This adds the _headers file after npm run build
