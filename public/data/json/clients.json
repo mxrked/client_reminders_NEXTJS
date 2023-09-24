@@ -1,0 +1,30 @@
+{
+  "clients": [
+    {
+      "client_ID": "C_0001",
+      "client_Name": "Chip Holden",
+      "client_FirstName": "Chip",
+      "client_Company": "Radiance Glow Hard Surface Cleaning",
+      "client_Domain": "www.radianceglowhsc.com",
+      "client_MonthlyPricing": 22.0,
+      "client_NeedsDomainPayment": true,
+      "client_DomainPayment": 15.0,
+      "client_PayDate": "1",
+      "client_Email": "info@radianceglowhsc.com",
+      "client_PhoneNumber": "3362591354"
+    },
+    {
+      "client_ID": "C_0002",
+      "client_Name": "Victor Garcia",
+      "client_FirstName": "Victor",
+      "client_Company": "Distinct Painting LLC",
+      "client_Domain": "www.distinctpaintingllc.com",
+      "client_MonthlyPricing": 52.0,
+      "client_NeedsDomainPayment": false,
+      "client_DomainPayment": 0.0,
+      "client_PayDate": "22",
+      "client_Email": "distinctpaintingllc@gmail.com",
+      "client_PhoneNumber": "3365007283"
+    }
+  ]
+}

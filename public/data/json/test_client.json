@@ -1,0 +1,17 @@
+{
+  "clients": [
+    {
+      "client_ID": "C_0000",
+      "client_Name": "Parker Phelps",
+      "client_FirstName": "Parker",
+      "client_Company": "Codingthefront",
+      "client_Domain": "www.codingthefront.com",
+      "client_MonthlyPricing": 22.0,
+      "client_NeedsDomainPayment": true,
+      "client_DomainPayment": 15.0,
+      "client_PayDate": "1",
+      "client_Email": "codingthefront@gmail.com",
+      "client_PhoneNumber": "3368313432"
+    }
+  ]
+}
