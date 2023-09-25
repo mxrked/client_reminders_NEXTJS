@@ -26,17 +26,51 @@ import "../assets/styles/modules/Index/Index.module.css";
 
 export default function Home() {
   const router = useRouter();
+  const currentDate = new Date();
+  const currentMonth = currentDate.toLocaleString("default", { month: "long" });
+
+  const [DB_CONNECTION_STATUS, SET_DB_CONNECTION_STATUS] = useState("");
+  const [CLIENTS, SET_CLIENTS] = useState([]);
+
+  // Fetching/setting clients data
+  useEffect(() => {
+    fetch("data/json/clients.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response not ok.");
+        }
+        return response.json();
+      })
+      .then((data) => SET_CLIENTS(data))
+      .catch((error) => console.error("Error fetching clients data: " + error));
+  }, []);
+
+  // Fetching database connection status
+  useEffect(() => {
+    fetch("/api/testConnection")
+      .then((response) => response.json())
+      .then((data) => {
+        SET_DB_CONNECTION_STATUS(data.message);
+
+        console.log(DB_CONNECTION_STATUS);
+      })
+      .catch((error) => {
+        console.error("Error fetching database connection: " + error);
+      });
+  }, []);
 
   return (
     <div id="PAGE" className={`${styles.page} page index-page`}>
       <div className={`${styles.page_inner} page-inner`}>
         <div className={`${styles.page_inner_top}`}>
-          <h1>Client Reminders.</h1>
+          <div className={`${styles.page_inner_top_cnt}`}>
+            <h1>Client Reminders.</h1>
 
-          <p>
-            This website is used to remind my freelance clients to pay their
-            fees via email and text messaging.
-          </p>
+            <p>
+              This website is used to remind my freelance clients to pay their
+              fees via email and text messaging.
+            </p>
+          </div>
         </div>
 
         <div className={`${styles.page_inner_filters}`}>
@@ -68,12 +102,14 @@ export default function Home() {
           >
             <span>Remind All Clients</span>
           </button>
+          {/**
           <button
             id="testMonthlyEmail"
             className={`${styles.test_monthly_email} half-second`}
           >
             <span>Send Test Monthly Email</span>
           </button>
+          */}
         </div>
 
         <div className={`${styles.page_inner_panels_holder}`}>
@@ -81,13 +117,138 @@ export default function Home() {
             id="addClientPanel"
             className={`${styles.panel} ${styles.add_client_panel} panel`}
           >
-            Add Client Panel
+            <div className={`${styles.panel_inner}`}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <div className={`${styles.client_set}`}>
+                  <label>Client Name:</label>
+                  <input type="text" id="clientName" name="clientName" />
+                </div>
+
+                <button id="addClient" type="submit">
+                  <span>Add Client</span>
+                </button>
+              </form>
+            </div>
           </div>
           <div
             id="viewClientsPanel"
             className={`${styles.panel} ${styles.view_clients_panel} panel`}
           >
-            View Clients Panel
+            <div className={`${styles.panel_inner}`}>
+              <div className={`${styles.panel_inner_box} container-fluid`}>
+                <div className={`${styles.panel_inner_row} row`}>
+                  {CLIENTS.length === 0 ? (
+                    <span className={`${styles.loading} half-second`}>
+                      Loading Clients ...
+                    </span>
+                  ) : (
+                    CLIENTS.map((client) => (
+                      <div
+                        key={client.client_ID}
+                        className={`${styles.client} col-lg-6 col-md-6 col-sm-6 col-xs-12`}
+                      >
+                        <div className={`${styles.client_inner}`}>
+                          <span className={`${styles.client_id} half-second`}>
+                            {client.client_ID}
+                          </span>
+                          <span className={`${styles.client_name} half-second`}>
+                            {client.client_Name}
+                          </span>
+                          <span
+                            className={`${styles.client_company} half-second`}
+                          >
+                            {client.client_Company}
+                          </span>
+                          <span
+                            className={`${styles.client_monthly_pricing} half-second`}
+                          >
+                            Monthly Price: ${client.client_MonthlyPricing}
+                          </span>
+                          {client.client_NeedsDomainPayment === true ? (
+                            <span
+                              className={`${styles.client_domain_payment} half-second`}
+                            >
+                              Domain Payment:{" "}
+                              <span>${client.client_DomainPayment}</span>
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.client_domain_payment} half-second`}
+                            >
+                              Domain Payment: None
+                            </span>
+                          )}
+                          {client.client_PayDate !== "" ? (
+                            <span
+                              className={`${styles.client_paydate} half-second`}
+                            >
+                              Monthly Pay Date:{" "}
+                              <span>
+                                {currentMonth} {client.client_PayDate}
+                              </span>
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.client_paydate} half-second`}
+                            >
+                              Monthly Pay Date: None
+                            </span>
+                          )}
+                          <span
+                            className={`${styles.client_payments_collected} half-second`}
+                          >
+                            Payments Collected:{" "}
+                            <span>{client.client_PaymentsCollected}</span>
+                          </span>
+                          {client.client_Email !== "" ? (
+                            <span
+                              className={`${styles.client_email} half-second`}
+                            >
+                              Email: <span>{client.client_Email}</span>
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.client_email} half-second`}
+                            >
+                              Email: None
+                            </span>
+                          )}
+                          {client.client_PhoneNumber !== "" ? (
+                            <span
+                              className={`${styles.client_phone_number} half-second`}
+                            >
+                              Phone Number:{" "}
+                              <span>{client.client_PhoneNumber}</span>
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.client_phone_number} half-second`}
+                            >
+                              Phone Number: None
+                            </span>
+                          )}
+                          <span
+                            onClick={() => {
+                              window.open(
+                                "https://" + client.client_Domain,
+                                "_blank"
+                              );
+                            }}
+                            className={`${styles.client_domain} half-second`}
+                          >
+                            View Website
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
           <div
             id="remindAClientPanel"
@@ -95,6 +256,7 @@ export default function Home() {
           >
             Remind A Client Panel
           </div>
+          {/***/}
           <div
             id="remindAllClientsPanel"
             className={`${styles.panel} ${styles.remind_all_clients_panel} panel`}
