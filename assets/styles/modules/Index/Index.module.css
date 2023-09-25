@@ -1,3 +1,23 @@
+@font-face {
+  font-family: "Noto Sans Black";
+  src: url("../../../fonts/NotoSans-Black.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Bold";
+  src: url("../../../fonts/NotoSans-Bold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lato Bold";
+  src: url("../../../fonts/Lato-Bold.ttf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lato Regular";
+  src: url("../../../fonts/Lato-Regular.ttf");
+  font-display: swap;
+}
 .page {
   height: 100%;
   width: 100%;
@@ -15,8 +35,54 @@
   margin-left: auto;
   margin-right: auto;
 }
+.page .page_inner .page_inner_top {
+  text-align: center;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page .page_inner .page_inner_top .page_inner_top_cnt {
+  width: 100%;
+}
+.page .page_inner .page_inner_top .page_inner_top_cnt h1 {
+  font-family: "Noto Sans Black";
+  font-size: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
+}
+.page .page_inner .page_inner_top .page_inner_top_cnt p {
+  font-family: "Lato Regular";
+  font-size: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+}
+.page .page_inner .page_inner_filters {
+  height: 90px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 70px;
+  max-width: 1000px;
+  width: 100%;
+}
+.page .page_inner .page_inner_filters button {
+  height: 45px;
+  background-color: black;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "Lato Bold";
+  font-size: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+  border-radius: 5px;
+}
+.page .page_inner .page_inner_filters button:hover {
+  background-color: rgb(18, 147, 228);
+}
 .page .page_inner .page_inner_panels_holder {
   position: relative;
+  height: 700px;
+  overflow: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
 }
 .page .page_inner .page_inner_panels_holder .panel {
   position: absolute;
@@ -25,4 +91,7 @@
   width: 100%;
   height: 100%;
   display: none;
+}
+.page .page_inner .page_inner_panels_holder .view_clients_panel .panel_inner .panel_inner_box .panel_inner_row .client .client_inner {
+  display: grid;
 }/*# sourceMappingURL=Index.module.css.map */
