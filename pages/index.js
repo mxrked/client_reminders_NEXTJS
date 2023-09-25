@@ -32,19 +32,6 @@ export default function Home() {
   const [DB_CONNECTION_STATUS, SET_DB_CONNECTION_STATUS] = useState("");
   const [CLIENTS, SET_CLIENTS] = useState([]);
 
-  // Fetching/setting clients data
-  useEffect(() => {
-    fetch("data/json/clients.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response not ok.");
-        }
-        return response.json();
-      })
-      .then((data) => SET_CLIENTS(data))
-      .catch((error) => console.error("Error fetching clients data: " + error));
-  }, []);
-
   // Fetching database connection status
   useEffect(() => {
     fetch("/api/testConnection")
@@ -75,18 +62,42 @@ export default function Home() {
 
         <div className={`${styles.page_inner_filters}`}>
           <button
+            id="viewClients"
+            className={`${styles.view_clients} half-second`}
+            onClick={() => {
+              FilterViewClients();
+
+              SET_CLIENTS([]); // Showing the loading text
+
+              // Updating the data
+              const timestamp = Date.now();
+              setTimeout(() => {
+                fetch(`/api/clientsDataToDB`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    fetch(`/api/getClientsFromDB?timestamp=${timestamp}`)
+                      .then((response) => response.json())
+                      .then((data) => {
+                        SET_CLIENTS(data);
+                      })
+                      .catch((error) => {
+                        console.error("Error fetching clients data: " + error);
+                      });
+                  })
+                  .catch((error) => {
+                    console.error("Error fetching clients data: " + error);
+                  });
+              }, 9400);
+            }}
+          >
+            <span>View/Refresh Clients</span>
+          </button>
+          <button
             id="addClient"
             className={`${styles.add_client} half-second`}
             onClick={FilterAddClient}
           >
             <span>Add Client</span>
-          </button>
-          <button
-            id="viewClients"
-            className={`${styles.view_clients} half-second`}
-            onClick={FilterViewClients}
-          >
-            <span>View Clients</span>
           </button>
           <button
             id="remindAClient"
@@ -141,9 +152,10 @@ export default function Home() {
             <div className={`${styles.panel_inner}`}>
               <div className={`${styles.panel_inner_box} container-fluid`}>
                 <div className={`${styles.panel_inner_row} row`}>
+                  {/***/}
                   {CLIENTS.length === 0 ? (
                     <span className={`${styles.loading} half-second`}>
-                      Loading Clients ...
+                      Loading Data ...
                     </span>
                   ) : (
                     CLIENTS.map((client) => (
